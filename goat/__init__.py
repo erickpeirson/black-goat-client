@@ -12,8 +12,6 @@ GOAT_MAX_RETRIES = os.environ.get('GOAT_MAX_RETRIES', 50)
 GOAT_WAIT_INTERVAL = eval(os.environ.get('GOAT_WAIT_INTERVAL', '0.8'))
 
 
-
-
 class BaseGoatObject(object):
     """
     Base class for all Goat classes.
@@ -100,6 +98,15 @@ class GoatConcept(BaseGoatObject):
     path = 'concept'
 
     @classmethod
+    def identical(cls, identifier):
+        partial = 'identical/'
+        if not GOAT.endswith('/'):
+            partial = '/' + partial
+        response = requests.get(GOAT + partial, params={'identifier': identifier})
+        data = cls._handle_response(response)
+        return [cls(**datum) for datum in data.get('results')]
+
+    @classmethod
     def search(cls, q):
         # Triggers an asynchronous search task across multiple authorities.
         partial = 'search/'
@@ -127,8 +134,8 @@ class GoatIdentity(BaseGoatObject):
 
 
 class GoatIdentitySystem(BaseGoatObject):
-    'identitysystem'
+    path = 'identitysystem'
 
 
 class GoatAuthority(BaseGoatObject):
-    'authority'
+    path = 'authority'

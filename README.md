@@ -6,7 +6,7 @@ A simple Python client for the [BlackGoat API](http://diging.github.io/black-goa
 
 ```python
 > import goat
-> goat.GOAT = 'http://path.to.a.goat/rest'
+> goat.GOAT = 'http://path.to.a.goat'
 > goat.GOAT_APP_TOKEN = 'myapptoken'
 > concepts = goat.GoatConcept.search(q='Bradshaw')
 > print concepts

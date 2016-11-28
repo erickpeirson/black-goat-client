@@ -3,13 +3,17 @@ Module for working with the Black Goat API. http://diging.github.io/black-goat.
 """
 
 
-import time, os
-import requests
+import time, os, json, requests
 
 GOAT_APP_TOKEN = os.environ.get('GOAT_APP_TOKEN', '')
 GOAT = os.environ.get('GOAT', '')
 GOAT_MAX_RETRIES = os.environ.get('GOAT_MAX_RETRIES', 50)
 GOAT_WAIT_INTERVAL = eval(os.environ.get('GOAT_WAIT_INTERVAL', '0.8'))
+
+
+class GoatList(list):
+    def json(self):
+        return json.dumps([o.data for o in self])
 
 
 class BaseGoatObject(object):
@@ -19,6 +23,9 @@ class BaseGoatObject(object):
 
     def __init__(self, **data):
         self._set_data(data)
+
+    def json(self):
+        return json.dumps(self)
 
     def _set_data(self, data):
         self.data = data
@@ -72,7 +79,7 @@ class BaseGoatObject(object):
 
         path = GOAT + partial
         data = cls._handle_response(requests.get(path, params=params))
-        return [cls(**datum) for datum in data.get('results')]
+        return GoatList([cls(**datum) for datum in data.get('results')])
 
     def create(self):
         if self.id:
@@ -104,7 +111,7 @@ class Concept(BaseGoatObject):
             partial = '/' + partial
         response = requests.get(GOAT + partial, params={'identifier': identifier})
         data = cls._handle_response(response)
-        return [cls(**datum) for datum in data.get('results')]
+        return GoatList([cls(**datum) for datum in data.get('results')])
 
     @classmethod
     def search(cls, q, **params):

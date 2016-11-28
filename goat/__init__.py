@@ -104,6 +104,15 @@ class BaseGoatObject(object):
 class Concept(BaseGoatObject):
     path = 'concept'
 
+    @staticmethod
+    def retrieve(identifier):
+        partial = 'retrieve/'
+        if not GOAT.endswith('/'):
+            partial = '/' + partial
+        response = requests.get(GOAT + partial, params={'identifier': identifier})
+        datum = cls._handle_response(response)
+        return Concept(**datum)
+
     @classmethod
     def identical(cls, identifier):
         partial = 'identical/'

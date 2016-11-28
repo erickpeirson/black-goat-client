@@ -134,7 +134,7 @@ class Concept(BaseGoatObject):
             r += 1
 
         data = cls._handle_response(response)
-        return [cls(**datum) for datum in data.get('results')]
+        return GoatList([cls(**datum) for datum in data.get('results')])
 
 
 class Identity(BaseGoatObject):

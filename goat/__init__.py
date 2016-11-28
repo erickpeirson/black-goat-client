@@ -107,12 +107,13 @@ class GoatConcept(BaseGoatObject):
         return [cls(**datum) for datum in data.get('results')]
 
     @classmethod
-    def search(cls, q):
+    def search(cls, q, **params):
         # Triggers an asynchronous search task across multiple authorities.
         partial = 'search/'
         if not GOAT.endswith('/'):
             partial = '/' + partial
-        response = requests.get(GOAT + partial, params={'q': q})
+        params.update({'q': q})
+        response = requests.get(GOAT + partial, params=params)
 
         # Check back until the results are ready.
         r = 0

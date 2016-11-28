@@ -74,7 +74,6 @@ class TestGoatAuthority(unittest.TestCase):
         self.assertTrue(authority.id is not None)
 
 
-
 class TestGoatIdentitySystem(unittest.TestCase):
     @mock.patch('requests.get')
     def test_list(self, mock_get):
@@ -207,7 +206,6 @@ class TestGoatConcept(unittest.TestCase):
         for concept in concepts:
             self.assertIsInstance(concept, goat.GoatConcept,
                                   "Each of which should be a GoatConcept.")
-
 
 
 if __name__ == '__main__':

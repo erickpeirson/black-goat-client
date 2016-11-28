@@ -50,7 +50,7 @@ class TestGoatAuthority(unittest.TestCase):
         with open('tests/data/system_list.json', 'r') as f:
             mock_get.return_value = MockResponse(f.read(), 200)
 
-        authorities = goat.GoatAuthority.list()
+        authorities = goat.Authority.list()
 
         args, kwargs = mock_get.call_args
         self.assertEqual(mock_get.call_count, 1,
@@ -60,7 +60,7 @@ class TestGoatAuthority(unittest.TestCase):
         self.assertEqual(len(authorities), 3,
                          "There should be 3 items in the result set.")
         for authority in authorities:
-            self.assertIsInstance(authority, goat.GoatAuthority,
+            self.assertIsInstance(authority, goat.Authority,
                                   "Each of which should be a GoatAuthority.")
 
     @mock.patch('requests.post')
@@ -69,7 +69,7 @@ class TestGoatAuthority(unittest.TestCase):
         with open('tests/data/authority_created.json', 'r') as f:
             mock_post.return_value = MockResponse(f.read(), 201)
 
-        authority = goat.GoatAuthority(name='GoatTest', description='The Test')
+        authority = goat.Authority(name='GoatTest', description='The Test')
         authority.create()
         self.assertTrue(authority.id is not None)
 
@@ -81,7 +81,7 @@ class TestGoatIdentitySystem(unittest.TestCase):
         with open('tests/data/system_list.json', 'r') as f:
             mock_get.return_value = MockResponse(f.read(), 200)
 
-        systems = goat.GoatIdentitySystem.list()
+        systems = goat.IdentitySystem.list()
         args, kwargs = mock_get.call_args
         self.assertEqual(mock_get.call_count, 1,
                          "Should make a single GET request.")
@@ -90,7 +90,7 @@ class TestGoatIdentitySystem(unittest.TestCase):
         self.assertEqual(len(systems), 3,
                          "There should be 3 items in the result set.")
         for system in systems:
-            self.assertIsInstance(system, goat.GoatIdentitySystem,
+            self.assertIsInstance(system, goat.IdentitySystem,
                                   "Each of which should be a"
                                   " GoatIdentitySystem.")
 
@@ -100,7 +100,7 @@ class TestGoatIdentitySystem(unittest.TestCase):
             mock_post.return_value = MockResponse(f.read(), 201)
 
         goat.GOAT = 'http://127.0.0.1:8000'
-        system = goat.GoatIdentitySystem(name='GoatTest', description='The Test')
+        system = goat.IdentitySystem(name='GoatTest', description='The Test')
         system.create()
 
         self.assertTrue(system.id is not None)
@@ -113,7 +113,7 @@ class TestGoatIdentity(unittest.TestCase):
         with open('tests/data/identity_list.json', 'r') as f:
             mock_get.return_value = MockResponse(f.read(), 200)
 
-        identities = goat.GoatIdentity.list()
+        identities = goat.Identity.list()
         args, kwargs = mock_get.call_args
 
         self.assertEqual(mock_get.call_count, 1,
@@ -129,7 +129,7 @@ class TestGoatIdentity(unittest.TestCase):
         with open('tests/data/identity_created.json', 'r') as f:
             mock_post.return_value = MockResponse(f.read(), 201)
 
-        identity = goat.GoatIdentity(name='GoatTest', concepts=['http://test.com/test3/', 'http://test.com/test2/'], part_of=4)
+        identity = goat.Identity(name='GoatTest', concepts=['http://test.com/test3/', 'http://test.com/test2/'], part_of=4)
         identity.create()
 
         self.assertTrue(identity.id is not None)
@@ -143,7 +143,7 @@ class TestGoatConcept(unittest.TestCase):
         with open('tests/data/concept_list_response.json', 'r') as f:
             mock_get.return_value = MockResponse(f.read(), 200)
 
-        concepts = goat.GoatConcept.list()
+        concepts = goat.Concept.list()
         args, kwargs = mock_get.call_args
 
         self.assertEqual(mock_get.call_count, 1,
@@ -153,7 +153,7 @@ class TestGoatConcept(unittest.TestCase):
         self.assertEqual(len(concepts), 19,
                          "There should be 19 items in the result set.")
         for concept in concepts:
-            self.assertIsInstance(concept, goat.GoatConcept,
+            self.assertIsInstance(concept, goat.Concept,
                                   "Each of which should be a GoatConcept.")
 
     @mock.patch('requests.get')
@@ -164,7 +164,7 @@ class TestGoatConcept(unittest.TestCase):
 
         max_calls = 3
 
-        concepts = goat.GoatConcept.search(q='Bradshaw')
+        concepts = goat.Concept.search(q='Bradshaw')
         self.assertEqual(mock_get.call_count, max_calls,
                          "Should keep calling if status code 202 is received.")
         args, kwargs =  mock_get.call_args
@@ -173,7 +173,7 @@ class TestGoatConcept(unittest.TestCase):
         self.assertEqual(len(concepts), 10,
                          "There should be 10 items in the result set.")
         for concept in concepts:
-            self.assertIsInstance(concept, goat.GoatConcept,
+            self.assertIsInstance(concept, goat.Concept,
                                   "Each of which should be a GoatConcept.")
 
     @mock.patch('requests.post')
@@ -181,7 +181,7 @@ class TestGoatConcept(unittest.TestCase):
         with open('tests/data/concept_created.json', 'r') as f:
             mock_post.return_value = MockResponse(f.read(), 201)
 
-        concept = goat.GoatConcept(name='GoatTest', identifier='http://test.com/test3/')
+        concept = goat.Concept(name='GoatTest', identifier='http://test.com/test3/')
         concept.create()
 
         self.assertTrue(concept.id is not None)
@@ -193,7 +193,7 @@ class TestGoatConcept(unittest.TestCase):
         with open('tests/data/concept_identical.json', 'r') as f:
             mock_get.return_value = MockResponse(f.read(), 200)
 
-        concepts = goat.GoatConcept.identical(identifier='http://test.com/test3/')
+        concepts = goat.Concept.identical(identifier='http://test.com/test3/')
 
         args, kwargs = mock_get.call_args
 
@@ -204,7 +204,7 @@ class TestGoatConcept(unittest.TestCase):
         self.assertEqual(len(concepts), 2,
                          "There should be 2 items in the result set.")
         for concept in concepts:
-            self.assertIsInstance(concept, goat.GoatConcept,
+            self.assertIsInstance(concept, goat.Concept,
                                   "Each of which should be a GoatConcept.")
 
 

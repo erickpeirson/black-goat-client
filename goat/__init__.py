@@ -94,7 +94,7 @@ class BaseGoatObject(object):
         self.data = self.read()
 
 
-class GoatConcept(BaseGoatObject):
+class Concept(BaseGoatObject):
     path = 'concept'
 
     @classmethod
@@ -130,13 +130,13 @@ class GoatConcept(BaseGoatObject):
         return [cls(**datum) for datum in data.get('results')]
 
 
-class GoatIdentity(BaseGoatObject):
+class Identity(BaseGoatObject):
     path = 'identity'
 
 
-class GoatIdentitySystem(BaseGoatObject):
+class IdentitySystem(BaseGoatObject):
     path = 'identitysystem'
 
 
-class GoatAuthority(BaseGoatObject):
+class Authority(BaseGoatObject):
     path = 'authority'

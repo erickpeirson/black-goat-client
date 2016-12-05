@@ -2,7 +2,7 @@ language: python
 python:
   - "2.7"
 before_script:
-  - pip install mock, nose
+  - pip install mock nose
 install:
   - pip install -r requirements.txt
 script:

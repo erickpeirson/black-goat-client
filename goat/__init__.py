@@ -38,8 +38,8 @@ class BaseGoatObject(object):
     def wait(cls):
         time.sleep(GOAT_WAIT_INTERVAL)
 
-    @property
-    def headers(self):
+    @staticmethod
+    def headers():
         return {'Authorization': 'Token %s' % GOAT_APP_TOKEN}
 
     def _path(self, partial):
@@ -84,17 +84,17 @@ class BaseGoatObject(object):
     def create(self):
         if self.id:
             raise RuntimeError('%s already exists' % type(self).__name__)
-        response = requests.post(self.create_endpoint, data=self.data, headers=self.headers)
+        response = requests.post(self.create_endpoint, data=self.data, headers=self.headers())
         return self._set_data(BaseGoatObject._handle_response(response))
 
     def read(self):
-        response = requests.get(self.read_endpoint, headers=self.headers)
+        response = requests.get(self.read_endpoint, headers=self.headers())
         return self._set_data(BaseGoatObject._handle_response(response))
 
     def update(self):
         if not self.id:
             raise RuntimeError('Must set id to update %s' % type(self).__name__)
-        response = requests.post(self.update_endpoint, data=self.data, headers=self.headers)
+        response = requests.post(self.update_endpoint, data=self.data, headers=self.headers())
         return self._set_data(BaseGoatObject._handle_response(response))
 
     def _update_from_remote(self):
@@ -129,7 +129,7 @@ class Concept(BaseGoatObject):
         if not GOAT.endswith('/'):
             partial = '/' + partial
         params.update({'q': q})
-        response = requests.get(GOAT + partial, params=params)
+        response = requests.get(GOAT + partial, params=params, headers=cls.headers())
 
         # Check back until the results are ready.
         r = 0
@@ -138,7 +138,7 @@ class Concept(BaseGoatObject):
                 raise IOError('Search failed: max retries exceded')
             # We will be redirected to a search-specific poll URL, so we want
             #  to call the final rather than the original url.
-            response = requests.get(response.url)
+            response = requests.get(response.url, headers=cls.headers())
             cls.wait()
             r += 1
 

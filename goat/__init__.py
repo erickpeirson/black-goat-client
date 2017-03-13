@@ -110,7 +110,7 @@ class Concept(BaseGoatObject):
         if not GOAT.endswith('/'):
             partial = '/' + partial
         response = requests.get(GOAT + partial, params={'identifier': identifier})
-        datum = cls._handle_response(response)
+        datum = Concept._handle_response(response)
         return Concept(**datum)
 
     @classmethod

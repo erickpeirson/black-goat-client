@@ -125,6 +125,8 @@ class Concept(BaseGoatObject):
     @classmethod
     def search(cls, q, **params):
         # Triggers an asynchronous search task across multiple authorities.
+        limit = params.pop('limit', 20)    # Number of results to retrieve.
+
         partial = 'search/'
         if not GOAT.endswith('/'):
             partial = '/' + partial
@@ -138,7 +140,7 @@ class Concept(BaseGoatObject):
                 raise IOError('Search failed: max retries exceded')
             # We will be redirected to a search-specific poll URL, so we want
             #  to call the final rather than the original url.
-            response = requests.get(response.url, headers=cls.headers())
+            response = requests.get(response.url, headers=cls.headers(), params={'limit': limit})
             cls.wait()
             r += 1
 

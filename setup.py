@@ -7,7 +7,7 @@ MAINTAINER_EMAIL = 'erick.peirson@asu.edu'
 DESCRIPTION = 'Simple client for the BlackGoat API'
 LICENSE = 'GNU GPL 3'
 URL = 'http://diging.github.io/black-goat/'
-VERSION = '0.2.5'
+VERSION = '0.2.6'
 
 PACKAGES = ['goat']
 
